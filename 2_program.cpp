@@ -5,6 +5,8 @@
 
 using namespace arma;
 using namespace std;
+
+
 int findmax_offdiag(mat &A, int &k, int &l, double &epsilon, int n)
 {
   k = 1;
@@ -29,6 +31,7 @@ int findmax_offdiag(mat &A, int &k, int &l, double &epsilon, int n)
     }
   return 0;
 }
+
 
 void rotate(mat &A,int k, int l, int N)
 {
@@ -83,39 +86,59 @@ void rotate(mat &A,int k, int l, int N)
   A(k,l) = 0.0;
   A(l,k) = 0.0;  
   
-  cout<<"*";
 }
 
-  
-
-
-
-int main()
+void Jacobi_alg( mat &A, int N, double epsilon, int max_iter)
 {
-  int N = 4;
-  mat A(N,N);
-  A.fill(1);
-  A(0,1) = 0;
-  A(1,0) = 0;
-  A(0,3) = 0;
-  A(3,0) = 0;
-  A(1,2) = 0;
-  A(2,1) = 0;
-  A(2,2) = 0;
-  
-  cout<<  A<<endl;
-  
-  int k,l, done;
-  double epsilon = 1.0e-8;
+  int iter=0;
+  int k,l,done;
   done = findmax_offdiag(A,k,l,epsilon,N); 
-  while (!done)
+  while (!done && iter <= max_iter)
     {
       rotate(A,k,l,N);
       done = findmax_offdiag(A,k,l,epsilon,N);
-      
+      iter++;
     }
-                      
-  cout<< endl<<A.diag();
+  if (iter == max_iter)
+    {cout << "Warning: Maximum number of iterations reached"<<endl;}
+}
+
+vec HO_potential(vec rho){return rho%rho;}
+
+
+void fill_matrix(mat &A, vec pot, double h)
+{
+  A.diag() = 2*h*h + pot;
+  A.diag(1).fill(-h);
+  A.diag(-1).fill(-h);
+}
+
+int main()
+{
+  //create rho, h, N,A
+  int N = 100; // N = n_{step}-1
+  double rho_max = 100;
+  double h = rho_max/(N+1);
+  vec rho(N);
+  
+  for(int i = 0; i<N; i++)
+    {
+      rho(i) = (i+1)*h;
+    }
+  
+  mat A = zeros<mat>(N,N);
+  vec pot = HO_potential(rho);
+  fill_matrix(A, pot, h);
+
+  
+  //decide here //make max_iter unmarked //find out maximum value of int
+  //decide if iter must be unmarked long or something
+  int max_iter = N*N*N*N;
+  double epsilon = 1.0e-8;
+  Jacobi_alg(A, N, epsilon, max_iter);
+  vec eig_vals = diagvec(A);
+  cout<<eig_vals(span(0,3));
+  
     
   return 0;
 }
