@@ -108,17 +108,17 @@ vec HO_potential(vec rho){return rho%rho;}
 
 void fill_matrix(mat &A, vec pot, double h)
 {
-  A.diag() = 2*h*h + pot;
-  A.diag(1).fill(-h);
-  A.diag(-1).fill(-h);
+  A.diag() = (2/(h*h) + pot);
+  A.diag(1).fill(-1/(h*h));
+  A.diag(-1).fill(-1/(h*h));
 }
 
 int main()
 {
-  //create rho, h, N,A
-  int N = 100; // N = n_{step}-1
-  double rho_max = 100;
-  double h = rho_max/(N+1);
+  
+  int N = 5; // N = n_{step}-1
+  double rho_max = 20;
+  double h = rho_max/(N+1);//skal det vaere n eller n+1 eller 2?
   vec rho(N);
   
   for(int i = 0; i<N; i++)
@@ -129,7 +129,7 @@ int main()
   mat A = zeros<mat>(N,N);
   vec pot = HO_potential(rho);
   fill_matrix(A, pot, h);
-
+  cout<< A;
   
   //decide here //make max_iter unmarked //find out maximum value of int
   //decide if iter must be unmarked long or something
@@ -137,8 +137,15 @@ int main()
   double epsilon = 1.0e-8;
   Jacobi_alg(A, N, epsilon, max_iter);
   vec eig_vals = diagvec(A);
-  cout<<eig_vals(span(0,3));
   
+  eig_vals = sort(eig_vals);
+  cout<<eig_vals(span(0,3)); //Noe gaar til helvete med verdiene
+  
+  mat B = zeros<mat>(N,N);
+  fill_matrix(B, pot, h);
+  vec arm_eig_vals = eig_sym(A);
+  arm_eig_vals = sort(arm_eig_vals);
+  cout<<endl<<arm_eig_vals(span(0,3));
     
   return 0;
 }
