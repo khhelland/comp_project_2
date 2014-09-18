@@ -6,7 +6,8 @@
 using namespace arma;
 using namespace std;
 
-
+// Functions for Jacobi Algorithm
+////////////////////////////////////////////////////
 int findmax_offdiag(mat &A, int &k, int &l, double &epsilon, int n)
 {
   k = 1;
@@ -102,6 +103,8 @@ void Jacobi_alg( mat &A, int N, double epsilon, int max_iter)
   if (iter == max_iter)
     {cout << "Warning: Maximum number of iterations reached"<<endl;}
 }
+//////////////////////////////////////////////////////////
+
 
 vec HO_potential(vec rho){return rho%rho;}
 
@@ -116,8 +119,9 @@ void fill_matrix(mat &A, vec pot, double h)
 int main()
 {
   
-  int N = 5; // N = n_{step}-1
-  double rho_max = 20;
+  int n_last_eigenvalue = 3;
+  int N = 300; // N = n_{step}-1
+  double rho_max = sqrt(4*n_last_eigenvalue+3)+1;
   double h = rho_max/(N+1);//skal det vaere n eller n+1 eller 2?
   vec rho(N);
   
@@ -129,23 +133,25 @@ int main()
   mat A = zeros<mat>(N,N);
   vec pot = HO_potential(rho);
   fill_matrix(A, pot, h);
-  cout<< A;
+  // cout<< rho<<endl;
+  // cout << pot<<endl;
+  // cout << A;
   
-  //decide here //make max_iter unmarked //find out maximum value of int
-  //decide if iter must be unmarked long or something
-  int max_iter = N*N*N*N;
+  
+  int max_iter = N*N*N;
   double epsilon = 1.0e-8;
   Jacobi_alg(A, N, epsilon, max_iter);
+  
   vec eig_vals = diagvec(A);
   
   eig_vals = sort(eig_vals);
-  cout<<eig_vals(span(0,3)); //Noe gaar til helvete med verdiene
+  cout<<eig_vals(span(0,n_last_eigenvalue -1)); //Noe gaar til helvete med verdiene
   
-  mat B = zeros<mat>(N,N);
-  fill_matrix(B, pot, h);
-  vec arm_eig_vals = eig_sym(A);
-  arm_eig_vals = sort(arm_eig_vals);
-  cout<<endl<<arm_eig_vals(span(0,3));
+  // mat B = zeros<mat>(N,N);
+  // fill_matrix(B, pot, h);
+  // vec arm_eig_vals = eig_sym(A);
+  // arm_eig_vals = sort(arm_eig_vals);
+  // cout<<endl<<arm_eig_vals(span(0,3));
     
   return 0;
 }
