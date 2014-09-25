@@ -10,11 +10,11 @@ using namespace std;
 
 
 
-int main()
+int main(int argc, char *argv[])
 {
   
-  int N = 100; // N = n_{step}-1
-  double omega = 0.25;
+  int N = 300; // N = n_{step}-1
+  double omega = atof(argv[1]);
   double rho_max = 10;
   double h = rho_max/(N+1);
   vec rho(N);
@@ -41,8 +41,9 @@ int main()
   cout<<eig_vals(indices(0))<<endl; 
   
   cout<<"Number of iterations: "<<iter<<endl;
-
-
+  vec ground =R(span(),indices(0));
+  ground /= h*sum(ground);
+  ground.save("ground.dat",raw_ascii);
   // mat B = zeros<mat>(N,N);
   // fill_matrix(B, pot, h);
   // vec arm_eig_vals = eig_sym(A);

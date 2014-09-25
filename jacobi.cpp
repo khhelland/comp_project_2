@@ -80,13 +80,12 @@ void rotate(mat &A, mat &R, int k, int l, int N)
           A(i,l) = il*cos + ik*sin;
           A(l,i) = A(i,l);
 
-          //eigenvectors
-          r_ik = R(i,k);
-          r_il = R(i,l);
-          R(i,k) = cos*r_ik - sin*r_il;
-          R(i,l) = cos*r_il + sin*r_ik;
-          
         }
+      //eigenvectors
+      r_ik = R(i,k);
+      r_il = R(i,l);
+      R(i,k) = cos*r_ik - sin*r_il;
+      R(i,l) = cos*r_il + sin*r_ik;
     }
   
   
