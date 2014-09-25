@@ -13,9 +13,9 @@ using namespace std;
 int main()
 {
   
-  int n_last_eigenvalue = 3;
   int N = 100; // N = n_{step}-1
-  double rho_max = sqrt(4*n_last_eigenvalue+3)+1;
+  double omega = 0.25;
+  double rho_max = 10;
   double h = rho_max/(N+1);
   vec rho(N);
   
@@ -26,7 +26,7 @@ int main()
   
   mat A = zeros<mat>(N,N);
   mat R = zeros<mat>(N,N);
-  vec pot = HO_potential(rho);
+  vec pot = two_independent_particle_potential(rho, omega);
   fill_matrix(A, pot, h);
   
   
@@ -35,9 +35,10 @@ int main()
   int iter = Jacobi_alg(A, R, N, epsilon, max_iter);
   
   vec eig_vals = diagvec(A);
+  uvec indices = sort_index(eig_vals);
+
   
-  eig_vals = sort(eig_vals);
-  cout<<eig_vals(span(0,n_last_eigenvalue -1)); 
+  cout<<eig_vals(indices(0))<<endl; 
   
   cout<<"Number of iterations: "<<iter<<endl;
 

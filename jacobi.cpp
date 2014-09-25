@@ -7,8 +7,11 @@ using namespace arma;
 using namespace std;
 
 
-int findmax_offdiag(mat &A, int &k, int &l, double &epsilon, int n)
+int findmax_offdiag(mat &A, int &k, int &l, double epsilon, int n)
 {
+  /*function for finding maximal nondiagonal element of a real symmetric matrix
+  the function also tests if this value is smaller than epsilon, returning
+  1 if it is (meaning the diagonalization is done) and 0 if it is not*/
   k = 1;
   l = 0;
   double max_val = abs(A(k,l));
@@ -33,8 +36,11 @@ int findmax_offdiag(mat &A, int &k, int &l, double &epsilon, int n)
 }
 
 
-void rotate(mat &A,int k, int l, int N)
+void rotate(mat &A, mat &R, int k, int l, int N)
 {
+  // Function for rotating A so that A(k,l) becomes zero
+  
+  //Find smallest angle theta
   double cos, sin;
   if (A(k,l) != 0.0)
     {
@@ -60,7 +66,8 @@ void rotate(mat &A,int k, int l, int N)
       sin = 0.0;
     }
   
-  double ik,il;
+  //Perform transformation
+  double ik,il,r_ik,r_il;
 
   for(int i = 0; i<N; i++)
     {
@@ -72,6 +79,13 @@ void rotate(mat &A,int k, int l, int N)
           A(k,i) = A(i,k);
           A(i,l) = il*cos + ik*sin;
           A(l,i) = A(i,l);
+
+          //eigenvectors
+          r_ik = R(i,k);
+          r_il = R(i,l);
+          R(i,k) = cos*r_ik - sin*r_il;
+          R(i,l) = cos*r_il + sin*r_ik;
+          
         }
     }
   
@@ -86,16 +100,24 @@ void rotate(mat &A,int k, int l, int N)
   A(k,l) = 0.0;
   A(l,k) = 0.0;  
   
+  // Find eigenfunction
 }
 
-int Jacobi_alg( mat &A, int N, double epsilon, int max_iter)
+
+int Jacobi_alg( mat &A, mat &R, int N, double epsilon, int max_iter)
 {
+  /* Function for performing jacobi algorithm.
+  The rotation is done a maximum of max_iter times.
+  The funciton returns number of rotations performed*/
+  
+  R.eye();
+  
   int iter=0;
   int k,l,done;
   done = findmax_offdiag(A,k,l,epsilon,N); 
   while (!done && iter <= max_iter)
     {
-      rotate(A,k,l,N);
+      rotate(A,R,k,l,N);
       done = findmax_offdiag(A,k,l,epsilon,N);
       iter++;
     }

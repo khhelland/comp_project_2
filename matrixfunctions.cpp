@@ -6,9 +6,10 @@ using namespace arma;
 
 vec HO_potential(vec rho){return rho%rho;}
 
-vec two_independant_particle_potential(vec rho, double omega)
+vec two_independent_particle_potential(vec rho, double omega)
 {
-  vec pot = (omega*omega)(rho%rho) - (1/rho);
+  vec pot = (omega*omega)*(rho%rho) + (1/rho);
+  return pot;
 }
 
 void fill_matrix(mat &A, vec pot, double h)
