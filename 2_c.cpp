@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
   
   int N = 300; // N = n_{step}-1
   double omega = atof(argv[1]);
-  double rho_max = 10;
+  double rho_max = atof(argv[2]);
   double h = rho_max/(N+1);
   vec rho(N);
   
@@ -42,13 +42,8 @@ int main(int argc, char *argv[])
   
   cout<<"Number of iterations: "<<iter<<endl;
   vec ground =R(span(),indices(0));
-  ground /= h*sum(ground);
+  ground /= sqrt(h*sum(ground%ground));
   ground.save("ground.dat",raw_ascii);
-  // mat B = zeros<mat>(N,N);
-  // fill_matrix(B, pot, h);
-  // vec arm_eig_vals = eig_sym(A);
-  // arm_eig_vals = sort(arm_eig_vals);
-  // cout<<endl<<arm_eig_vals(span(0,n_last_eigenvalue-1));
-    
+      
   return 0;
 }
