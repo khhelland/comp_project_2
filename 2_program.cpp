@@ -14,8 +14,8 @@ int main()
 {
   
   int n_last_eigenvalue = 3;
-  int N = 100; // N = n_{step}-1
-  double rho_max = sqrt(4*n_last_eigenvalue+3)+1;
+  int N = 200; // N = n_{step}-1
+  double rho_max = 4.8;
   double h = rho_max/(N+1);
   vec rho(N);
   
@@ -42,11 +42,5 @@ int main()
   cout<<"Number of iterations: "<<iter<<endl;
 
 
-  // mat B = zeros<mat>(N,N);
-  // fill_matrix(B, pot, h);
-  // vec arm_eig_vals = eig_sym(A);
-  // arm_eig_vals = sort(arm_eig_vals);
-  // cout<<endl<<arm_eig_vals(span(0,n_last_eigenvalue-1));
-    
   return 0;
 }
