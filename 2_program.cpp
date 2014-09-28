@@ -8,8 +8,7 @@ using namespace arma;
 using namespace std;
 
 int main()
-{
-  
+{    
   int n_eigenvalues = 3;
   
   int N = 200; // N = n_{step}-1
