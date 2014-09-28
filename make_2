@@ -1,3 +1,4 @@
+#Dette er makefilen for 2_c.cpp
 COMPILEFLAGS = -O3
 #LIBDIR = -L/usr/libs
 LIBDIR = 
