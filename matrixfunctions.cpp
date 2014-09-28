@@ -6,7 +6,7 @@ using namespace arma;
 
 vec HO_potential(vec rho){return rho%rho;}
 
-vec two_independent_particle_potential(vec rho, double omega)
+vec two_particle_potential(vec rho, double omega)
 {
   vec pot = (omega*omega)*(rho%rho) + (1/rho);
   return pot;

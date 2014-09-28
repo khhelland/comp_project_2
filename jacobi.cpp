@@ -99,7 +99,6 @@ void rotate(mat &A, mat &R, int k, int l, int N)
   A(k,l) = 0.0;
   A(l,k) = 0.0;  
   
-  // Find eigenfunction
 }
 
 
