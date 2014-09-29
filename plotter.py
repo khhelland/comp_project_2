@@ -1,16 +1,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import os, time
+import os
 
 #make programs
-#os.system('make')
+
 os.system('make -f make_2')
 
-
-#lufile = open('lu_err.dat','w')
-
-
-#lufile.write('n & $\epsilon_i$ \\\ \hline \n')
 
 n = 300
 rhomax = (40,10,8,5)
@@ -20,6 +15,7 @@ for i in range(len(omegas)):
     
     run = ' '.join(('./2_c.x', str(omegas[i]), str(rhomax[i])))
     os.system(run)
+    
     #Fetch simulation
     wavefunction = np.loadtxt('ground.dat')
     probability = np.zeros(n+2)
@@ -29,9 +25,7 @@ for i in range(len(omegas)):
     
     
 
-    #Plot data against analytical solution
-
-    
+    #Plot data 
     plt.plot(rho,probability,'-')
     plt.hold(1)
                    
@@ -43,5 +37,5 @@ plt.ylabel(r'$|u(\rho)|^2$')
 plt.savefig('probability_densities.png')
 
 
-    #lufile.write(' '.join((str(steps),'&',str(eps),'\\\ \hline \n')))
+
 
